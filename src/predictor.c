@@ -61,7 +61,9 @@ uint32_t *choice_pht;
 //custom -- perceptron
 
 //hypter parameters to tune for perceptron
-
+// I referred to the implementation from 
+// https://github.com/pwwpche/CSE240-Branch-Predictor
+// for the data structures and the logic
 
 #define PCSIZE 90
 #define HEIGHT 20
@@ -71,7 +73,7 @@ uint32_t *choice_pht;
 
 int16_t W[PCSIZE][HEIGHT + 1]; //weights with size PCSIZE * Height * 16
 int16_t ghistory_percep[HEIGHT]; // ghistory of size  Height * 16
-int32_t threshold;
+int32_t threshold; // threshold
 uint8_t recent_prediction = NOTTAKEN;
 uint8_t need_train = 0;
 
@@ -205,8 +207,6 @@ void init_tournament() {
   }
 
 }
-
-
 
 
 uint8_t 
@@ -352,13 +352,14 @@ void init_custom(){
 uint8_t custom_predict(uint32_t pc){
   uint32_t index = MASK_PC(pc);
   int16_t out = W[index][0];
-
+  
   for(int i = 1 ; i <= HEIGHT ; i++)
   {
+    
     if (ghistory_percep[i-1])
-      out += W[index][i];
+      out = out + W[index][i];
     else
-      out -= W[index][i];
+      out = out - W[index][i];
   }
   if (out>=0){
     recent_prediction =  TAKEN;
