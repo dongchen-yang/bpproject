@@ -63,13 +63,14 @@ uint32_t *choice_pht;
 //hypter parameters to tune for perceptron
 
 
-#define PCSIZE 426
+#define PCSIZE 90
 #define HEIGHT 20
 #define SATUATELEN 8
 #define MASK_PC(x) ((x * 19) % PCSIZE)
 
-int16_t W[PCSIZE][HEIGHT + 1];
-int16_t ghistory_percep[HEIGHT];
+
+int16_t W[PCSIZE][HEIGHT + 1]; //weights with size PCSIZE * Height * 16
+int16_t ghistory_percep[HEIGHT]; // ghistory of size  Height * 16
 int32_t threshold;
 uint8_t recent_prediction = NOTTAKEN;
 uint8_t need_train = 0;
@@ -342,7 +343,7 @@ void init_custom(){
 
   //init size of weights and global history easier way compares with the init provided for gshare
   // referred to the implementation on
-  //https://github.com/ajgupta93/gshare-and-tournament-branch-predictor/blob/master/src/percp.c
+  //https://github.com/pwwpche/CSE240-Branch-Predictor/blob/master/predictor.c
   memset(W, 0, sizeof(int16_t) * PCSIZE * (HEIGHT + 1));
   memset(ghistory_percep, 0, sizeof(uint16_t) * HEIGHT);
 }
